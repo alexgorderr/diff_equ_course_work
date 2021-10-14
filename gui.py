@@ -80,18 +80,15 @@ class Application:
 
     def evaluate(self):
 
-        self.method[self.method_chooser.get()]()
+        steps, v = self.method[self.method_chooser.get()]()
 
-        # steps, v = forward_euler.ForwardEuler().compute()
-
-        # fig = Figure(figsize=(6, 6))
-        # a = fig.add_subplot(111)
-        # a.plot(range(steps), v, 'b-')
-        # a.set_title('Euler method')
-        # a.set_xlabel('Time, s')
-        # a.set_ylabel('Velocity, m/s')
-        # # self.graph_frame.master.children.pop()
-        # canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
-        # canvas.get_tk_widget().pack()
-        # canvas.draw()
-
+        fig = Figure(figsize=(6, 6))
+        a = fig.add_subplot(111)
+        a.plot(range(steps), v, 'b-')
+        a.set_title('Euler method')
+        a.set_xlabel('Time, s')
+        a.set_ylabel('Velocity, m/s')
+        # self.graph_frame.master.children.pop()
+        canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
+        canvas.get_tk_widget().pack()
+        canvas.draw()
