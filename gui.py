@@ -3,6 +3,9 @@ from tkinter import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import forward_euler
+import backward_euler
+import runge_kutta
+import heun
 
 
 class Application:
@@ -10,6 +13,19 @@ class Application:
     def __init__(self, window):
 
         self.window = window
+
+        self.method_name = ['Forward Euler',
+                            'Backward Euler',
+                            'Runge-Kutta',
+                            'Heun']
+
+        self.method_executor = [forward_euler.ForwardEuler().compute,
+                                backward_euler.BackwardEuler().compute,
+                                runge_kutta.RungeKutta().compute,
+                                heun.Heun().compute]
+
+        self.method = dict(zip(self.method_name, self.method_executor))
+        print(self.method)
 
         self.upper_frame = Frame(self.window)
         self.upper_frame.pack()
@@ -63,16 +79,19 @@ class Application:
             # elem.grid(column=i, row=0)
 
     def evaluate(self):
-        steps, v = forward_euler.ForwardEuler().compute()
 
-        fig = Figure(figsize=(6, 6))
-        a = fig.add_subplot(111)
-        a.plot(range(steps), v, 'b-')
-        a.set_title('Euler method')
-        a.set_xlabel('Time, s')
-        a.set_ylabel('Velocity, m/s')
-        # self.graph_frame.master.children.pop()
-        canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
-        canvas.get_tk_widget().pack()
-        canvas.draw()
+        self.method[self.method_chooser.get()]()
+
+        # steps, v = forward_euler.ForwardEuler().compute()
+
+        # fig = Figure(figsize=(6, 6))
+        # a = fig.add_subplot(111)
+        # a.plot(range(steps), v, 'b-')
+        # a.set_title('Euler method')
+        # a.set_xlabel('Time, s')
+        # a.set_ylabel('Velocity, m/s')
+        # # self.graph_frame.master.children.pop()
+        # canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
+        # canvas.get_tk_widget().pack()
+        # canvas.draw()
 
