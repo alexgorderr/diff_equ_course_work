@@ -4,6 +4,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import forward_euler
 import backward_euler
+import trapezoid
 import runge_kutta
 import heun
 
@@ -16,16 +17,18 @@ class Application:
 
         self.method_name = ['Forward Euler',
                             'Backward Euler',
+                            'Trapezoid',
                             'Runge-Kutta',
                             'Heun']
 
         self.method_executor = [forward_euler.ForwardEuler().compute,
                                 backward_euler.BackwardEuler().compute,
+                                trapezoid.Trapezoid().compute(),
                                 runge_kutta.RungeKutta().compute,
                                 heun.Heun().compute]
 
         self.method = dict(zip(self.method_name, self.method_executor))
-        print(self.method)
+        # print(self.method)
 
         self.upper_frame = Frame(self.window)
         self.upper_frame.pack()
@@ -39,10 +42,7 @@ class Application:
 
         Label(self.upper_frame, text='Method').grid(column=1, row=0)
         self.method_chooser = ttk.Combobox(self.upper_frame,
-                                           values=['Forward Euler',
-                                                   'Backward Euler',
-                                                   'Runge-Kutta',
-                                                   'Heun'],
+                                           values=self.method_name,
                                            state='readonly')
         self.method_chooser.current(0)
         self.method_chooser.grid(column=1, row=1)
@@ -75,8 +75,9 @@ class Application:
         self.evaluate_button['state'] = NORMAL
 
         for i in range(int(self.number_of_steps.get())):
-            print('!!!')
+            # print('!!!')
             # elem.grid(column=i, row=0)
+            pass
 
     def evaluate(self):
 
@@ -85,10 +86,9 @@ class Application:
         fig = Figure(figsize=(6, 6))
         a = fig.add_subplot(111)
         a.plot(range(steps), v, 'b-')
-        a.set_title('Euler method')
+        a.set_title(f'{self.method_chooser.get()} method')
         a.set_xlabel('Time, s')
         a.set_ylabel('Velocity, m/s')
-        # self.graph_frame.master.children.pop()
         canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
         canvas.get_tk_widget().pack()
         canvas.draw()
