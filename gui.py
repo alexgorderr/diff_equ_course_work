@@ -6,26 +6,47 @@ import forward_euler
 import backward_euler
 import trapezoid
 import runge_kutta
-import heun
 
 
-class Application:
+class StepInput(Frame):
+    def __init__(self, frame, num):
+        super(StepInput, self).__init__(frame)
+        Label(frame, text=f'{num} stage').grid(column=0 + 2*num, row=0, columnspan=2)
+        Label(frame, text='Thrust').grid(column=0 + 2*num, row=1)
+        self.thrust_entry = Entry(frame).grid(column=1 + 2*num, row=1)
+        Label(frame, text='Mass').grid(column=0 + 2*num, row=2)
+        self.mass_entry = Entry(frame).grid(column=1 + 2*num, row=2)
+        Label(frame, text='Fuel mass').grid(column=0 + 2*num, row=3)
+        self.fuel_mass_entry = Entry(frame).grid(column=1 + 2*num, row=3)
+        Label(frame, text='Burn rate').grid(column=0 + 2*num, row=4)
+        self.burn_rate_entry = Entry(frame).grid(column=1 + 2*num, row=4)
+
+
+class Application(Frame):
+
+    def update_steps(self, event):
+        print(self.number_of_steps.get())
 
     def __init__(self, window):
+        super(Application, self).__init__(window)
 
         self.window = window
 
-        self.method_name = ['Forward Euler',
+        self.steps = []
+
+        self.method_name = [
+                            'Forward Euler',
                             'Backward Euler',
                             'Trapezoid',
                             'Runge-Kutta',
-                            'Heun']
+                            ]
 
-        self.method_executor = [forward_euler.ForwardEuler().compute,
+        self.method_executor = [
+                                forward_euler.ForwardEuler().compute,
                                 backward_euler.BackwardEuler().compute,
                                 trapezoid.Trapezoid().compute,
                                 runge_kutta.RungeKutta().compute,
-                                heun.Heun().compute]
+                                ]
 
         self.method = dict(zip(self.method_name, self.method_executor))
         # print(self.method)
@@ -35,8 +56,9 @@ class Application:
 
         Label(self.upper_frame, text='Steps').grid(column=0, row=0)
         self.number_of_steps = ttk.Combobox(self.upper_frame,
-                                            values=[1, 2, 3, 4],
+                                            values=[1, 2, 3],
                                             state='readonly')
+        self.number_of_steps.bind("<<ComboboxSelected>>", self.update_steps)
         self.number_of_steps.current(0)
         self.number_of_steps.grid(column=0, row=1)
 
@@ -54,20 +76,21 @@ class Application:
         self.step_chooser.current(2)
         self.step_chooser.grid(column=2, row=1)
 
-        self.step_input_button = Button(self.upper_frame, text='Configure', command=self.configure)
-        self.step_input_button.grid(column=4, row=0, rowspan=2)
-        # ----------------
-        self.step_input = Frame(self.window)
-        self.step_input.pack()
+        self.step_input_button = Button(self.upper_frame, text='Configure', command=self.tmp_configure)
+        self.step_input_button.grid(column=4, row=0)
 
-        self.evaluate_button = Button(self.step_input, text="Evaluate", command=self.evaluate, state=DISABLED)
-        self.evaluate_button.grid(column=4, row=0, rowspan=2)
+        self.evaluate_button = Button(self.upper_frame, text="Evaluate", command=self.evaluate, state=DISABLED)
+        self.evaluate_button.grid(column=4, row=1)
+
+        # ----------------
+        self.step_input_frame = Frame(self.window)
+        self.step_input_frame.pack()
         # ----------------
 
         self.graph_frame = Frame(self.window)
         self.graph_frame.pack()
 
-    def configure(self):
+    def tmp_configure(self):
         self.number_of_steps['state'] = DISABLED
         self.method_chooser['state'] = DISABLED
         self.step_chooser['state'] = DISABLED
@@ -76,9 +99,7 @@ class Application:
         self.evaluate_button['state'] = NORMAL
 
         for i in range(int(self.number_of_steps.get())):
-            # print('!!!')
-            # elem.grid(column=i, row=0)
-            pass
+            self.steps.append(StepInput(frame=self.step_input_frame, num=i).grid(column=i, row=0))
 
     def evaluate(self):
 
