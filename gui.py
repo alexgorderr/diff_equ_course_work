@@ -62,6 +62,7 @@ class Application:
 
         self.evaluate_button = Button(self.step_input, text="Evaluate", command=self.evaluate, state=DISABLED)
         self.evaluate_button.grid(column=4, row=0, rowspan=2)
+        # ----------------
 
         self.graph_frame = Frame(self.window)
         self.graph_frame.pack()
