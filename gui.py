@@ -23,7 +23,7 @@ class Application:
 
         self.method_executor = [forward_euler.ForwardEuler().compute,
                                 backward_euler.BackwardEuler().compute,
-                                trapezoid.Trapezoid().compute(),
+                                trapezoid.Trapezoid().compute,
                                 runge_kutta.RungeKutta().compute,
                                 heun.Heun().compute]
 
