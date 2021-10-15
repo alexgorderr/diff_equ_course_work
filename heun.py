@@ -1,6 +1,6 @@
 
 
-class Trapezoid:
+class Heun:
 
     def __init__(self):
         self.g = 9.8
