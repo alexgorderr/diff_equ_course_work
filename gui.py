@@ -112,5 +112,9 @@ class Application(Frame):
         a.set_xlabel('Time, s')
         a.set_ylabel('Velocity, m/s')
         canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
+
+        if len(canvas.get_tk_widget().master.children) > 1:
+            list(canvas.get_tk_widget().master.children.values())[0].destroy()
+
         canvas.get_tk_widget().pack()
         canvas.draw()
