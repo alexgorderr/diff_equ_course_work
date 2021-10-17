@@ -35,18 +35,20 @@ class Application(Frame):
         self.steps = []
 
         self.method_name = [
-                            'Forward Euler',
-                            'Backward Euler',
-                            'Trapezoid',
-                            'Runge-Kutta',
-                            ]
+            'Forward Euler',
+            'Backward Euler',
+            'Trapezoid',
+            'Runge-Kutta',
+        ]
+
+        args = []
 
         self.method_executor = [
-                                forward_euler.ForwardEuler().compute,
-                                backward_euler.BackwardEuler().compute,
-                                trapezoid.Trapezoid().compute,
-                                runge_kutta.RungeKutta().compute,
-                                ]
+            forward_euler.ForwardEuler().compute,
+            backward_euler.BackwardEuler().compute,
+            trapezoid.Trapezoid().compute,
+            runge_kutta.RungeKutta().compute,
+        ]
 
         self.method = dict(zip(self.method_name, self.method_executor))
         # print(self.method)
