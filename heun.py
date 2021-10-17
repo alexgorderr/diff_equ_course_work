@@ -1,7 +1,7 @@
 from processor import Processor
 
 
-class Trapezoid(Processor):
+class Heun(Processor):
     def compute(self):
         v = [0]
         steps = int(round(self.engine_burn / self.h, 0))

@@ -4,7 +4,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import forward_euler
 import backward_euler
-import trapezoid
+import heun
 import runge_kutta
 
 
@@ -37,7 +37,7 @@ class Application(Frame):
         self.method_name = [
             'Forward Euler',
             'Backward Euler',
-            'Trapezoid',
+            'Heun',
             'Runge-Kutta',
         ]
 
@@ -46,7 +46,7 @@ class Application(Frame):
         self.method_executor = [
             forward_euler.ForwardEuler().compute,
             backward_euler.BackwardEuler().compute,
-            trapezoid.Trapezoid().compute,
+            heun.Heun().compute,
             runge_kutta.RungeKutta().compute,
         ]
 
