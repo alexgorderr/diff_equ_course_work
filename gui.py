@@ -4,14 +4,14 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import forward_euler
 import backward_euler
-import heun
+import trapezoid
 import runge_kutta
 
 
 class StepInput(Frame):
     def __init__(self, frame, num):
         super(StepInput, self).__init__(frame)
-        Label(frame, text=f'{num+1} stage').grid(column=0 + 2*num, row=0, columnspan=2)
+        Label(frame, text=f'{num} stage').grid(column=0 + 2*num, row=0, columnspan=2)
         Label(frame, text='Thrust').grid(column=0 + 2*num, row=1)
         self.thrust_entry = Entry(frame).grid(column=1 + 2*num, row=1)
         Label(frame, text='Mass').grid(column=0 + 2*num, row=2)
@@ -35,18 +35,20 @@ class Application(Frame):
         self.steps = []
 
         self.method_name = [
-                            'Forward Euler',
-                            'Backward Euler',
-                            'Heun',
-                            'Runge-Kutta',
-                            ]
+            'Forward Euler',
+            'Backward Euler',
+            'Trapezoid',
+            'Runge-Kutta',
+        ]
+
+        args = []
 
         self.method_executor = [
-                                forward_euler.ForwardEuler().compute,
-                                backward_euler.BackwardEuler().compute,
-                                heun.Heun().compute,
-                                runge_kutta.RungeKutta().compute
-                                ]
+            forward_euler.ForwardEuler().compute,
+            backward_euler.BackwardEuler().compute,
+            trapezoid.Trapezoid().compute,
+            runge_kutta.RungeKutta().compute,
+        ]
 
         self.method = dict(zip(self.method_name, self.method_executor))
         # print(self.method)
