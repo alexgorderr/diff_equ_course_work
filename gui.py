@@ -8,10 +8,10 @@ import heun
 import runge_kutta
 
 
-class StepInput(Frame):
+class StageInput(Frame):
     def __init__(self, frame, num):
-        super(StepInput, self).__init__(frame)
-        Label(frame, text=f'{num} stage').grid(column=0 + 2*num, row=0, columnspan=2)
+        super(StageInput, self).__init__(frame)
+        Label(frame, text=f'{num+1} stage').grid(column=0 + 2*num, row=0, columnspan=2)
         Label(frame, text='Thrust').grid(column=0 + 2*num, row=1)
         self.thrust_entry = Entry(frame).grid(column=1 + 2*num, row=1)
         Label(frame, text='Mass').grid(column=0 + 2*num, row=2)
@@ -20,19 +20,21 @@ class StepInput(Frame):
         self.fuel_mass_entry = Entry(frame).grid(column=1 + 2*num, row=3)
         Label(frame, text='Burn rate').grid(column=0 + 2*num, row=4)
         self.burn_rate_entry = Entry(frame).grid(column=1 + 2*num, row=4)
+        Label(frame, text='Burn time').grid(column=0 + 2*num, row=5)
+        self.burn_time_entry = Entry(frame).grid(column=1 + 2 * num, row=5)
 
 
 class Application(Frame):
 
-    def update_steps(self, event):
-        print(self.number_of_steps.get())
+    def update_stages(self, event):
+        print(self.number_of_stages.get())
 
     def __init__(self, window):
         super(Application, self).__init__(window)
 
         self.window = window
 
-        self.steps = []
+        self.stages = []
 
         self.method_name = [
             'Forward Euler',
@@ -56,13 +58,13 @@ class Application(Frame):
         self.upper_frame = Frame(self.window)
         self.upper_frame.pack()
 
-        Label(self.upper_frame, text='Steps').grid(column=0, row=0)
-        self.number_of_steps = ttk.Combobox(self.upper_frame,
-                                            values=[1, 2, 3],
-                                            state='readonly')
-        self.number_of_steps.bind("<<ComboboxSelected>>", self.update_steps)
-        self.number_of_steps.current(0)
-        self.number_of_steps.grid(column=0, row=1)
+        Label(self.upper_frame, text='Stages').grid(column=0, row=0)
+        self.number_of_stages = ttk.Combobox(self.upper_frame,
+                                             values=[1, 2, 3],
+                                             state='readonly')
+        self.number_of_stages.bind("<<ComboboxSelected>>", self.update_stages)
+        self.number_of_stages.current(0)
+        self.number_of_stages.grid(column=0, row=1)
 
         Label(self.upper_frame, text='Method').grid(column=1, row=0)
         self.method_chooser = ttk.Combobox(self.upper_frame,
@@ -78,38 +80,41 @@ class Application(Frame):
         self.step_chooser.current(2)
         self.step_chooser.grid(column=2, row=1)
 
-        self.step_input_button = Button(self.upper_frame, text='Configure', command=self.tmp_configure)
-        self.step_input_button.grid(column=4, row=0)
+        Label(self.upper_frame, text='Rocket mass').grid(column=3, row=0)
+        self.rocket_mass = Entry(self.upper_frame).grid(column=3, row=1)
+
+        self.stages_input_button = Button(self.upper_frame, text='Configure', command=self.tmp_configure)
+        self.stages_input_button.grid(column=4, row=0)
 
         self.evaluate_button = Button(self.upper_frame, text="Evaluate", command=self.evaluate, state=DISABLED)
         self.evaluate_button.grid(column=4, row=1)
 
         # ----------------
-        self.step_input_frame = Frame(self.window)
-        self.step_input_frame.pack()
+        self.stages_input_frame = Frame(self.window)
+        self.stages_input_frame.pack()
         # ----------------
 
         self.graph_frame = Frame(self.window)
         self.graph_frame.pack()
 
     def tmp_configure(self):
-        self.number_of_steps['state'] = DISABLED
-        self.method_chooser['state'] = DISABLED
-        self.step_chooser['state'] = DISABLED
-        self.step_input_button['state'] = DISABLED
+        # self.number_of_stage['state'] = DISABLED
+        # self.method_chooser['state'] = DISABLED
+        # self.step_chooser['state'] = DISABLED
+        self.stages_input_button['state'] = DISABLED
 
         self.evaluate_button['state'] = NORMAL
 
-        for i in range(int(self.number_of_steps.get())):
-            self.steps.append(StepInput(frame=self.step_input_frame, num=i).grid(column=i, row=0))
+        for i in range(int(self.number_of_stages.get())):
+            self.stages.append(StageInput(frame=self.stages_input_frame, num=i).grid(column=i, row=0, ipadx=10))
 
     def evaluate(self):
 
-        steps, v = self.method[self.method_chooser.get()]()
+        t, v = self.method[self.method_chooser.get()]()
 
         fig = Figure(figsize=(6, 6))
         a = fig.add_subplot(111)
-        a.plot(range(steps), v, 'b-')
+        a.plot(range(t), v, 'b-')
         a.set_title(f'{self.method_chooser.get()} method')
         a.set_xlabel('Time, s')
         a.set_ylabel('Velocity, m/s')

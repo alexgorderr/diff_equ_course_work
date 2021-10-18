@@ -1,5 +1,5 @@
 class Processor:
-    def __init__(self):
+    def __init__(self):  # , thrusts, engine_burn, consumption_rate, rocket_mass, fuel_mass):
         self.g = 9.8
 
         self.thrust = 153.51 * 1000  # kN
@@ -7,7 +7,7 @@ class Processor:
         self.consumption_rate = 87.37864  # kg / s
         self.initial_mass = 3380  # kg
 
-        self.specific_impulse = 179.1  # s
+        self.specific_impulse = self.thrust / (self.g * self.consumption_rate)  # s
         self.drag_coefficient = 0.38  # kg / m
 
         self.final_mass = self.initial_mass - self.engine_burn * self.consumption_rate
