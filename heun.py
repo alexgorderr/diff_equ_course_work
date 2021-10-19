@@ -3,17 +3,20 @@ from processor import Processor
 
 class Heun(Processor):
     def compute(self):
+        sum_steps = 1
         v = [0]
-        steps = int(round(self.engine_burn / self.h, 0))
-        for n in range(1, steps):
-            v.append(v[-1] + (self.h / 2) * (
-                self.v_t(self.thrust,
-                         self.initial_mass,
-                         self.consumption_rate, n, self.g,
-                         self.drag_coefficient, v[-1]) +
-                self.v_t(self.thrust,
-                         self.initial_mass,
-                         self.consumption_rate, n+1, self.g,
-                         self.drag_coefficient, v[-1])))
-            print(f"Step: {n}, Xn: {n * self.h}, Vn: {v[-1]}")
-        return steps, v
+        for i in range(self.stages):
+            steps = int(round(self.burn_time[i] / self.h, 0))
+            for n in range(steps):
+                v.append(v[-1] + (self.h / 2) * (
+                    self.v_t(self.thrust[i],
+                             self.initial_mass,
+                             self.burn_rate[i], n, self.g,
+                             self.drag_coefficient, v[-1]) +
+                    self.v_t(self.thrust[i],
+                             self.initial_mass,
+                             self.burn_rate[i], n+1, self.g,
+                             self.drag_coefficient, v[-1])))
+                print(f"Step: {sum_steps+n}, Xn: {sum_steps+n * self.h}, Vn: {v[-1]}")
+            sum_steps += steps
+        return sum_steps, v
