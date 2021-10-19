@@ -1,3 +1,4 @@
+import math
 from tkinter import ttk
 from tkinter import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -75,9 +76,9 @@ class Application(Frame):
 
         Label(self.upper_frame, text='h').grid(column=2, row=0)
         self.step_chooser = ttk.Combobox(self.upper_frame,
-                                         values=[1, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001],
+                                         values=[1, 0.75, 0.5, 0.25],
                                          state='readonly')
-        self.step_chooser.current(1)
+        self.step_chooser.current(2)
         self.step_chooser.grid(column=2, row=1)
 
         self.evaluate_button = Button(self.upper_frame, text="Evaluate", command=self.evaluate, state=DISABLED)
@@ -109,10 +110,15 @@ class Application(Frame):
         stages = int(self.number_of_stages.get())
         h = float(self.step_chooser.get())
 
-        thrust = [153.51, 153.51 / 2]
-        mass = [3380, 3380 / 2]
+        thrust = [153.51, 120]
+        mass = [3380, 2200]
         burn_rate = [87.37864, 87.37864 / 2]
         burn_time = [10.3, 10.3 / 2]
+
+        thrust = [153.51]
+        mass = [3380]
+        burn_rate = [87.37864]
+        burn_time = [10.3]
 
         method_executor = [
             forward_euler.ForwardEuler(stages, thrust, mass, burn_rate, burn_time, h).compute,
@@ -124,13 +130,16 @@ class Application(Frame):
         method = dict(zip(self.method_name, method_executor))
         # print(self.method)
 
-        t, v = method[self.method_chooser.get()]()
+        t, v, v_ = method[self.method_chooser.get()]()
 
         fig = Figure(figsize=(6, 6))
         a = fig.add_subplot(111)
-        x = range(t)
-        y = v
-        a.plot(x, y, 'b-')
+        x = [h * i for i in range(t)]
+        y1 = v
+        y2 = v_
+        a.plot(x, y1, 'b-')
+        a.plot(x, y2, 'g-')
+        a.plot(x, [abs(y1[i]-y2[i]) for i in range(len(x))], 'r-', )
         a.set_title(f'{self.method_chooser.get()} method')
         a.set_xlabel('Time, s')
         a.set_ylabel('Velocity, m/s')

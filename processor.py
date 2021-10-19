@@ -1,8 +1,12 @@
+import math
+
+
 class Processor:
     def __init__(self, stages, thrust, mass, burn_rate, burn_time, h):
         self.g = 9.8
         self.stages = stages
 
+        self.mass = mass
         self.thrust = [i * 1000 for i in thrust]  # 153.51 * 1000  # kN
         self.initial_mass = sum([i for i in mass])  # 3380  # kg
         self.burn_rate = burn_rate  # 87.37864  # kg / s
@@ -20,4 +24,3 @@ class Processor:
 
     def v_t(self, r, m, lam, t, g, k, v):
         return (r - g * self.m_t(m, t, lam) - k * v * v + lam * v) / self.m_t(m, t, lam)
-
