@@ -1,4 +1,3 @@
-import math
 import statistics
 from tkinter import ttk
 from tkinter import *
@@ -77,7 +76,7 @@ class Application(Frame):
 
         Label(self.upper_frame, text='h').grid(column=2, row=0)
         self.step_chooser = ttk.Combobox(self.upper_frame,
-                                         values=[1, 0.75, 0.5, 0.25],
+                                         values=[1, 0.75, 0.5, 0.25, 0.01, 0.001],
                                          state='readonly')
         self.step_chooser.current(2)
         self.step_chooser.grid(column=2, row=1)
@@ -96,30 +95,22 @@ class Application(Frame):
     def conf_stages(self, event):
         self.evaluate_button['state'] = NORMAL
 
-        while len(self.stages) > int(self.number_of_stages.get()):
-            break
-
         for i in range(len(self.stages), int(self.number_of_stages.get())):
             self.stages.append(StageInput(self, frame=self.stages_input_frame, num=i))
             self.stages[i].grid(column=i, row=0)
 
     def evaluate(self):
-        # thrust = [float(i.get()) for i in self.thrust_entry]
-        # mass = [int(i.get()) for i in self.mass_entry]
-        # burn_rate = [float(i.get()) for i in self.burn_rate_entry]
-        # burn_time = [float(i.get()) for i in self.burn_time_entry]
+        thrust = [float(i.get()) for i in self.thrust_entry]
+        mass = [int(i.get()) for i in self.mass_entry]
+        burn_rate = [float(i.get()) for i in self.burn_rate_entry]
+        burn_time = [float(i.get()) for i in self.burn_time_entry]
         stages = int(self.number_of_stages.get())
         h = float(self.step_chooser.get())
 
-        thrust = [153.51, 153.51, 153.51]
-        mass = [3380, 3380, 3380]
-        burn_rate = [87.37864, 87.37864, 87.37864]
-        burn_time = [30, 20, 20]
-
-        # thrust = [153.51]
-        # mass = [3380]
-        # burn_rate = [87.37864]
-        # burn_time = [10.3]
+        # thrust = [153.51, 153.51, 153.51]
+        # mass = [3380, 3380, 3380]
+        # burn_rate = [87.37864, 87.37864, 87.37864]
+        # burn_time = [30, 20, 20]
 
         method_executor = [
             forward_euler.ForwardEuler(stages, thrust, mass, burn_rate, burn_time, h).compute,
@@ -129,7 +120,6 @@ class Application(Frame):
         ]
 
         method = dict(zip(self.method_name, method_executor))
-        # print(self.method)
 
         t, v, v_ = method[self.method_chooser.get()]()
 
@@ -143,9 +133,8 @@ class Application(Frame):
         max_err = max(err)
         mean_err = statistics.mean(err)
         median_err = statistics.median(err)
-        mse_err = sum([pow(v[i]-v_[i], 2) for i in range(t)]) / t
 
-        print(f'max_err={max_err}\nmean_err={mean_err}\nmedian_err={median_err}\nmse_err={mse_err}')
+        print(f'{max_err:.3f}\n{mean_err:.3f}\n{median_err:.3f}\n')
 
         a.plot(x, y1, 'b-')
         a.plot(x, y2, 'g-')
