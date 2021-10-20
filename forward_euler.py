@@ -16,7 +16,7 @@ class ForwardEuler(Processor):
                                                    self.burn_rate[i], n, self.g,
                                                    self.drag_coefficient, v[-1]))
                 print(f"Step: {sum_steps+n}, Xn: {sum_steps+n * self.h}, Vn: {v[-1]}")
-                v_ = []
+                v_.append(self.specific_impulse[i] * self.g * math.log(mass / self.m_t(mass, n*self.h, self.burn_rate[i])))
             sum_steps += steps
             mass -= self.mass[i]
         return sum_steps, v, v_

@@ -115,10 +115,10 @@ class Application(Frame):
         burn_rate = [87.37864, 87.37864 / 2]
         burn_time = [10.3, 10.3 / 2]
 
-        thrust = [153.51]
-        mass = [3380]
-        burn_rate = [87.37864]
-        burn_time = [10.3]
+        # thrust = [153.51]
+        # mass = [3380]
+        # burn_rate = [87.37864]
+        # burn_time = [10.3]
 
         method_executor = [
             forward_euler.ForwardEuler(stages, thrust, mass, burn_rate, burn_time, h).compute,
