@@ -1,4 +1,4 @@
-import math
+import numpy as np
 from processor import Processor
 
 
@@ -17,7 +17,8 @@ class BackwardEuler(Processor):
                                                    self.burn_rate[i], n+1, self.g,
                                                    self.drag_coefficient, v[-1]))
                 print(f"Step: {sum_steps+n}, Xn: {sum_steps+n * self.h}, Vn: {v[-1]}")
-                v_.append(self.specific_impulse[i] * self.g * math.log(mass / self.m_t(mass, n*self.h, self.burn_rate[i])) + start_speed)
+                v_.append(self.specific_impulse[i] * self.g *
+                          np.log(mass / self.m_t(mass, n*self.h, self.burn_rate[i])) + start_speed)
             start_speed = v_[-1]
             sum_steps += steps
             mass -= self.mass[i]
