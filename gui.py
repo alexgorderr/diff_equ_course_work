@@ -111,10 +111,10 @@ class Application(Frame):
         stages = int(self.number_of_stages.get())
         h = float(self.step_chooser.get())
 
-        thrust = [153.51, 153.51]
-        mass = [3380, 3380]
-        burn_rate = [87.37864, 87.37864]
-        burn_time = [30, 20]
+        thrust = [153.51, 153.51, 153.51]
+        mass = [3380, 3380, 3380]
+        burn_rate = [87.37864, 87.37864, 87.37864]
+        burn_time = [30, 20, 20]
 
         # thrust = [153.51]
         # mass = [3380]
@@ -145,7 +145,7 @@ class Application(Frame):
         median_err = statistics.median(err)
         mse_err = sum([pow(v[i]-v_[i], 2) for i in range(t)]) / t
 
-        print(f'{max_err=}\n{mean_err=}\n{median_err=}\n{mse_err=}')
+        print(f'max_err={max_err}\nmean_err={mean_err}\nmedian_err={median_err}\nmse_err={mse_err}')
 
         a.plot(x, y1, 'b-')
         a.plot(x, y2, 'g-')
