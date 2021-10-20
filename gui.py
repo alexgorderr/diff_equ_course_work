@@ -1,4 +1,5 @@
 import math
+import statistics
 from tkinter import ttk
 from tkinter import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -103,17 +104,17 @@ class Application(Frame):
             self.stages[i].grid(column=i, row=0)
 
     def evaluate(self):
-        # thrust = [float(i.get()) for i in self.thrust_entry]
-        # mass = [int(i.get()) for i in self.mass_entry]
-        # burn_rate = [float(i.get()) for i in self.burn_rate_entry]
-        # burn_time = [float(i.get()) for i in self.burn_time_entry]
+        thrust = [float(i.get()) for i in self.thrust_entry]
+        mass = [int(i.get()) for i in self.mass_entry]
+        burn_rate = [float(i.get()) for i in self.burn_rate_entry]
+        burn_time = [float(i.get()) for i in self.burn_time_entry]
         stages = int(self.number_of_stages.get())
         h = float(self.step_chooser.get())
 
-        thrust = [153.51, 120]
-        mass = [3380, 2200]
-        burn_rate = [87.37864, 87.37864 / 2]
-        burn_time = [10.3, 10.3 / 2]
+        # thrust = [153.51, 120]
+        # mass = [3380, 2200]
+        # burn_rate = [87.37864, 87.37864 / 2]
+        # burn_time = [10.3, 10.3 / 2]
 
         # thrust = [153.51]
         # mass = [3380]
@@ -137,9 +138,18 @@ class Application(Frame):
         x = [h * i for i in range(t)]
         y1 = v
         y2 = v_
+        err = [abs(y1[i]-y2[i]) for i in range(len(x))]
+
+        max_err = max(err)
+        mean_err = statistics.mean(err)
+        median_err = statistics.median(err)
+        mse_err = sum([pow(v[i]-v_[i], 2) for i in range(t)]) / t
+
+        print(f'{max_err=}\n{mean_err=}\n{median_err=}\n{mse_err=}')
+
         a.plot(x, y1, 'b-')
         a.plot(x, y2, 'g-')
-        a.plot(x, [abs(y1[i]-y2[i]) for i in range(len(x))], 'r-', )
+        a.plot(x, err, 'r-', )
         a.set_title(f'{self.method_chooser.get()} method')
         a.set_xlabel('Time, s')
         a.set_ylabel('Velocity, m/s')

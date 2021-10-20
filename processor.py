@@ -1,6 +1,3 @@
-import math
-
-
 class Processor:
     def __init__(self, stages, thrust, mass, burn_rate, burn_time, h):
         self.g = 9.8

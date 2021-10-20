@@ -20,7 +20,7 @@ class Heun(Processor):
                              mass,
                              self.burn_rate[i], n+1, self.g,
                              self.drag_coefficient, v[-1])))
-                v_.append(self.specific_impulse[i] * self.g * n * math.log(mass / self.m_t(mass, n, self.burn_rate[i])))
+                v_.append(self.specific_impulse[i] * self.g * math.log(mass / self.m_t(mass, n*self.h, self.burn_rate[i])))
                 print(f"Step: {sum_steps+n}, Xn: {sum_steps+n * self.h}, Vn: {v[-1]}")
             sum_steps += steps
             mass -= self.mass[i]
