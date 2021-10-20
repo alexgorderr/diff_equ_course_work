@@ -104,17 +104,17 @@ class Application(Frame):
             self.stages[i].grid(column=i, row=0)
 
     def evaluate(self):
-        thrust = [float(i.get()) for i in self.thrust_entry]
-        mass = [int(i.get()) for i in self.mass_entry]
-        burn_rate = [float(i.get()) for i in self.burn_rate_entry]
-        burn_time = [float(i.get()) for i in self.burn_time_entry]
+        # thrust = [float(i.get()) for i in self.thrust_entry]
+        # mass = [int(i.get()) for i in self.mass_entry]
+        # burn_rate = [float(i.get()) for i in self.burn_rate_entry]
+        # burn_time = [float(i.get()) for i in self.burn_time_entry]
         stages = int(self.number_of_stages.get())
         h = float(self.step_chooser.get())
 
-        # thrust = [153.51, 120]
-        # mass = [3380, 2200]
-        # burn_rate = [87.37864, 87.37864 / 2]
-        # burn_time = [10.3, 10.3 / 2]
+        thrust = [153.51, 153.51]
+        mass = [3380, 3380]
+        burn_rate = [87.37864, 87.37864]
+        burn_time = [30, 20]
 
         # thrust = [153.51]
         # mass = [3380]
@@ -153,6 +153,7 @@ class Application(Frame):
         a.set_title(f'{self.method_chooser.get()} method')
         a.set_xlabel('Time, s')
         a.set_ylabel('Velocity, m/s')
+        a.grid()
         canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
 
         if len(canvas.get_tk_widget().master.children) > 1:

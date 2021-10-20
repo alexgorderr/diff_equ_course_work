@@ -5,7 +5,7 @@ class Processor:
 
         self.mass = mass
         self.thrust = [i * 1000 for i in thrust]  # 153.51 * 1000  # kN
-        self.initial_mass = sum([i for i in mass])  # 3380  # kg
+        self.initial_mass = sum(mass)  # 3380  # kg
         self.burn_rate = burn_rate  # 87.37864  # kg / s
         self.burn_time = burn_time  # 10.3  # s
 
